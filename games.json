@@ -5,7 +5,7 @@
         "description": "Tests the game launcher loololol to make sure it works i think....",
         "thumbnail": "assets/thumbnails/example-game.svg",
         "version": "1.0.0"
-    }
+    },
     {
     "id": "pizza-tower",
     "name": "Pizza Tower 1.1.0",
