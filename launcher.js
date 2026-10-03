@@ -26,10 +26,10 @@
       typeof game.name === "string";
   }
 
-  function gamePath(game) {
-    // The folder name is ALWAYS the game's id.
-    return `games/${encodeURIComponent(game.id)}/index.html`;
-  }
+function gamePath(game) {
+    const entry = game.entry || "index.html";
+    return `games/${encodeURIComponent(game.id)}/${entry}`;
+}
 
   function renderCard(game) {
     const button = document.createElement("button");
