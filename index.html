@@ -15,6 +15,28 @@
       </div>
       <div class="status" id="status">Loading games...</div>
     </header>
+  <div class="search-wrap">
+    <label for="gameSearch">Search games</label>
+
+    <div class="search-box">
+        <span aria-hidden="true">⌕</span>
+
+        <input
+            id="gameSearch"
+            type="search"
+            placeholder="Search by game name, ID, or description..."
+            autocomplete="off"
+            spellcheck="false"
+        >
+
+        <button
+            id="clearSearch"
+            type="button"
+            aria-label="Clear search"
+            title="Clear search"
+        >×</button>
+    </div>
+</div>
 
     <section class="content">
       <div class="game-grid" id="gameGrid" aria-label="Games"></div>
