@@ -1,8 +1,8 @@
 [
     {
         "id": "example-game",
-        "name": "Example Game",
-        "description": "A placeholder game folder showing how the launcher works.",
+        "name": "Test Game",
+        "description": "Tests the game launcher loololol to make sure it works i think....",
         "thumbnail": "assets/thumbnails/example-game.svg",
         "version": "1.0.0"
     }
