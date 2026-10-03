@@ -37,5 +37,13 @@
         "thumbnail": "assets/thumbnails/thats-not-my-neighbor.png",
         "version": "1.0.0",
         "entry": "index.html"
+    },
+    {
+        "id": "ultrakill",
+        "name": "ULTRAKILL",
+        "description": "ULTRAKILL Web Port",
+        "thumbnail": "assets/thumbnails/ultrakill.png",
+        "version": "1.0.0",
+        "entry": "index.html"
     }
 ]
