@@ -22,11 +22,19 @@
         "version": "1.0.0",
         "entry": "index.html"
     },
-        {
+    {
         "id": "buckshot-roulette",
         "name": "Buckshot Roulette",
         "description": "Buckshot Roulette Web Port",
         "thumbnail": "assets/thumbnails/buckshot-roulette.png",
+        "version": "1.0.0",
+        "entry": "index.html"
+    },
+    {
+        "id": "thats-not-my-neighbor",
+        "name": "That's Not My Neighbor",
+        "description": "That's Not My Neighbor Web Port",
+        "thumbnail": "assets/thumbnails/thats-not-my-neighbor.png",
         "version": "1.0.0",
         "entry": "index.html"
     }
