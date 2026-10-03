@@ -21,5 +21,13 @@
         "thumbnail": "assets/thumbnails/half-life.png",
         "version": "1.0.0",
         "entry": "index.html"
+    },
+        {
+        "id": "buckshot-roulette",
+        "name": "Buckshot Roulette",
+        "description": "Buckshot Roulette Web Port",
+        "thumbnail": "assets/thumbnails/buckshot-roulette.png",
+        "version": "1.0.0",
+        "entry": "index.html"
     }
 ]
