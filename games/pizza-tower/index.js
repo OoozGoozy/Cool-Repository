@@ -1,407 +1,3 @@
-<!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" />
-	<!-- For Favicons -->
-    <link rel="icon" type="x-icon" href="favicon.png">
-	<!-- For Page Title -->
-    <title>Pizza Tower 1.1.0 Web Port</title>
-    <style>
-      @-webkit-keyframes rotation {
-        from {
-          -webkit-transform: rotate(0deg);
-        }
-
-        to {
-          -webkit-transform: rotate(360deg);
-        }
-      }
-
-      @-moz-keyframes rotation {
-        from {
-          -moz-transform: rotate(0deg);
-        }
-
-        to {
-          -moz-transform: rotate(360deg);
-        }
-      }
-
-      @-o-keyframes rotation {
-        from {
-          -o-transform: rotate(0deg);
-        }
-
-        to {
-          -o-transform: rotate(360deg);
-        }
-      }
-
-      @keyframes rotation {
-        from {
-          transform: rotate(0deg);
-        }
-
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      html {
-        background: #FFFFFF;
-      }
-
-      body {
-        font-family: arial;
-        margin: 0;
-        padding: 0;
-        min-height: 100vh;
-        min-height: -webkit-fill-available;
-        min-height: fill-available;
-        min-height: 100vh; /* Otherwise contents can be covered by an address bar in Safari on iOS 15 */
-        min-width: 100vw;
-        background: radial-gradient(
-          56.63% 56.63% at 50% 43.37%,
-          transparent 0%,
-          transparent 100%
-        );
-		background-color: black;
-        display: flex;
-        flex-direction: column;
-        overflow-x: hidden;
-		place-items: center;
-      }
-
-      body.scrollingDisabled {
-        overflow: hidden;
-      }
-
-      .emscripten {
-        padding-right: 0;
-        display: block;
-      }
-
-      div.emscripten {
-        text-align: center;
-		font-family: "Lucida Console", Monaco, monospace;
-      }
-
-      /* the canvas *must not* have any border or padding, or mouse coords will be wrong */
-      canvas.emscripten {
-        display: none;
-        background-color: black;
-        position: flex;
-        transition: opacity 5s ease-in;
-        -webkit-transition: opacity 5s ease-in;
-        opacity: 0;
-        filter: blur(0) grayscale(0);
-        image-rendering: optimizeSpeed;             /* Older versions of FF          */
-        image-rendering: -moz-crisp-edges;          /* FF 6.0+                       */
-        image-rendering: -webkit-optimize-contrast; /* Safari                        */
-        image-rendering: -o-crisp-edges;            /* OS X & Windows Opera (12.02+) */
-        image-rendering: pixelated;                 /* Awesome future-browsers       */
-        -ms-interpolation-mode: nearest-neighbor;   /* IE                            */
-      }
-
-      canvas.active {
-        animation-name: fadeIn;
-        animation-duration: 2s;
-        opacity: 1;
-      }
-
-      canvas.paused {
-        animation-name: blur;
-        animation-duration: 0.5s;
-        filter: blur(2px) grayscale(1);
-      }
-
-      canvas.unpaused {
-        animation-name: none;
-      }
-
-      canvas.animatedSizeTransitions {
-        transition: width 0.3s ease, height 0.3s ease;
-      }
-
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-        }
-
-        100% {
-          opacity: 1;
-        }
-      }
-
-      @keyframes blur {
-        0% {
-          filter: blur(0) grayscale(0);
-        }
-
-        100% {
-          filter: blur(2px) grayscale(1);
-        }
-      }
-
-      .spinner {
-        height: 30px;
-        width: 30px;
-
-        -webkit-animation: rotation 0.8s linear infinite;
-        -moz-animation: rotation 0.8s linear infinite;
-        -o-animation: rotation 0.8s linear infinite;
-        animation: rotation 0.8s linear infinite;
-
-        border: 5px solid #bdff00;
-        border-top: 5px solid #719900;
-        border-radius: 100%;
-      }
-
-      #status {
-        display: inline-block;
-        vertical-align: top;
-        font-weight: bold;
-        color: white;
-      }
-
-      #progress {
-        width: 250px;
-        height: 10px;
-        -webkit-appearance: none;
-        appearance: none;
-        padding: 5px;
-      }
-
-      /* Determines the style of the background of the progress bar */
-      progress[value]::-webkit-progress-bar {
-        background-color: #8492a6;
-        height: 10px;
-        border-radius: 15px;
-      }
-      /* Determines the style of the completed part of the progress bar */
-      progress[value]::-webkit-progress-value {
-        background-image: -webkit-linear-gradient(left, #719900, #bdff00);
-        height: 10px;
-        border-radius: 15px;
-      }
-
-      div.loading {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        pointer-events: none;
-      }
-      div.loading > * {
-        padding: 10px;
-        margin: 10px;
-      }
-
-      .output-container {
-        text-align: center;
-        margin-top: auto;
-      }
-      .output-button {
-        border: none;
-        width: 200px;
-        height: 25px;
-        margin: 5px;
-        border-radius: 5px;
-        cursor: pointer;
-        background-color: black;
-        color: white;
-		outline-color: #20c20e;
-		outline-style: dashed;
-        font-family: "Lucida Console", Monaco, monospace;
-      }
-
-      #output {
-        display: none;
-        height: 200px;
-        background-color: black;
-        color: white;
-        font-family: "Lucida Console", Monaco, monospace;
-        outline: none;
-        border: none;
-        padding: 0;
-        width: 100%;
-      }
-
-      #message-container {
-        display: none;
-        min-height: 50px;
-        background-color: rgba(20, 20, 20, 0.5);
-        outline: none;
-        border: none;
-        padding: 0;
-        width: 100%;
-        position: absolute;
-        top: 0;
-      }
-
-      #messages {
-        margin-left: 50px;
-        color: white;
-        font-family: "Lucida Console", Monaco, monospace;
-        outline: none;
-        border: none;
-        padding: 0;
-      }
-
-      img.qrCode {
-         opacity: 1.0;
-         width: 50%;
-         height: 50%;
-      }
-
-      #pauseMenuContainer {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      #pauseMenuContainer[hidden] {
-        display: none !important;
-        opacity: 0;
-      }
-
-      #pauseMenuBorder {
-        background: linear-gradient(135deg, #FA1E4E, transparent 40%);
-        padding: 1px;
-        border-radius: 4px;
-        clip-path: polygon(10.5px 0, 100% 0, 100% 100%, 0 100%, 0 10.5px);
-        width: 70vw;
-        max-width: 400px;
-      }
-
-      #pauseMenu {
-        display: flex;
-        flex-direction: column;
-        padding: 60px 30px 60px 30px;
-        background: linear-gradient(180deg, #2E273F 16.15%, rgba(46, 39, 63, 0.79) 56.25%, #2E273F 91.15%);
-        border-radius: 4px;
-        clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
-        animation-name: fadeIn;
-        animation-duration: 0.5s;
-        opacity: 1;
-      }
-
-      #pauseMenu button {
-        font-weight: 500;
-        font-size: 17px;
-        color: white;
-        background: #FA1E4E;
-        border: 1px solid #FA1E4E;
-        border-radius: 6px;
-        padding: 12px 24px;
-        margin: 5px 0;
-        -webkit-user-select: none;
-        user-select: none;
-      }
-
-      #pauseMenu button#quitButton {
-        background: #FA1E4E40;
-      }
-
-      #pauseMenu button:hover {
-        filter: brightness(1.15);
-      }
-
-      #pauseMenu button:active {
-        filter: brightness(0.85);
-      }
-
-      #pauseMenu button[hidden] {
-        display: none;
-      }
-    </style>
-  </head>
-  <body>
-    <canvas
-      class="emscripten"
-      id="canvas"
-      oncontextmenu="event.preventDefault()"
-      tabindex="-1"
-    >
-    </canvas>
-    <div id="pauseMenuContainer" hidden>
-      <div id="pauseMenuBorder">
-        <div id="pauseMenu">
-          <button id="resumeButton" onclick="resume()">
-            Resume
-          </button>
-          <button id="quitButton" onclick="quitIfSupported()">
-            Quit
-          </button>
-        </div>
-        </div>
-    </div>
-    <div class="loading">
-      <div class="spinner" id="spinner"></div>
-      <div class="emscripten" id="status">Downloading...</div>
-
-      <progress value="0" max="100" id="progress" hidden="1"></progress>
-    </div>
-    <div class="output-container" id="output-container">
-	  <!-- Stock Toggle Console Button -->
-      <button class="output-button" onclick="toggleConsole()" title="Lists Console Output and Loading Progress"+>
-        Toggle Console
-      </button>
-	  <!-- Go to Github Repo Button -->
-      <button id="QRButton" class="output-button" onclick="togglegithub()" title="Sends you to My Github Repository of this Project"+>
-        Visit Github Repo
-      </button>
-	  <!-- CLear Site Cache Button -->
-      <button id="QR2Button" class="output-button" onclick="toggleclear_site_cache()" title="Fixes Crashes due to the Website being Updated, but also Deletes ALL Saves, so Continue with Caution"+>
-        Clear Site Cache
-      </button>
-		<!-- Enable FPS Counter Bookmarklet Button -->
-      <button class="output-button" id="stats-button" onclick="toggleFPS()" title="Enables External FPS Counter"+>
-        Enable FPS Counter
-      </button>
-	    <!-- Go to Web Port Website Button -->
-      <button class="output-button" id="share-button" onclick="togglewebports()" title="Sends you to My Personal Website with a List of All My Web Ports"+>
-        View All Web Ports
-      </button>
-	    <!-- Join Discord Server Button -->
-	  <button class="output-button" onclick="togglejoin_discord()" title="Press to Join My Discord Server for Info and Updates"+>
-        Join Discord Server
-      </button>
-	    <!-- Background Color Changer Button -->
-      <input id="colorpicker" type="color" onchange="changecolor(this)" title="Changes Color of the Website's Background"+>
-      <textarea id="output" rows="8"></textarea>
-    </div>
-
-    <div id="message-container">
-      <div id="messages">
-      </div>
-    </div>
-	<!-- Ads Stuff for games that need it -->
-   <script async
-     data-ad-client="ca-pub-123"
-     data-ad-frequency-hint="30s"
-     data-adbreak-test="on"
-     src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js">
-   </script>
-
-   <script>
-     window.adsbygoogle = window.adsbygoogle || [];
-     const adBreak =  adConfig = function(o) {adsbygoogle.push(o);}
-   </script>
-
-    <script type="text/javascript">
 	// Background Color Changer Function
 	function changecolor(el) {
 		document.body.style.backgroundColor = el.value;
@@ -427,6 +23,18 @@
       const messageContainerElement = document.getElementById("message-container");
       const messagesElement = document.getElementById("messages");
       let rollbackMessages = [];
+	  
+	  // BAD STUFF IN CONSOLE | DO NOT DISPLAY!!!
+	  const CONSOLE_layer_set_visible = "layer_set_visible() - could not find specified layer in current room";
+	  const CONSOLE_layer_tilemap_get_id = "layer_tilemap_get_id() - specified tilemap not found";
+	  const CONSOLE_layer_depth = "layer_depth() - can't find specified layer";
+	  const CONSOLE_draw_tilemap = "draw_tilemap() - couldn't find specified tilemap";
+	  const CONSOLE_layer_get_all_elements = "layer_get_all_elements() - can't find specified layer"; // biggest pain in the ass
+	  // crack
+	  console.log("*************************");
+	  console.log("BetterRunner v1.2");
+	  console.log("_____by burnedpopcorn180");
+	  console.log("*************************");
 
       let clearRollbackMessagesTimeoutId = -1;
       const showRollbackMessage = function (message) {
@@ -486,7 +94,8 @@
             if (arguments.length > 1)
               text = Array.prototype.slice.call(arguments).join(" ");
 			// for normal console
-            console.log(text);
+			if (text != CONSOLE_layer_set_visible && text != CONSOLE_layer_tilemap_get_id && text != CONSOLE_layer_depth && text != CONSOLE_draw_tilemap && text != CONSOLE_layer_get_all_elements)
+				{console.log(text);}
             if (text === "Entering main loop.") {
               // It seems that this text ensures game is loaded.
               ensureAspectRatio();
@@ -500,8 +109,10 @@
 			  // TRUE END of custom shit
             }
             if (element) {
-              element.value += text + "\n";
-              element.scrollTop = element.scrollHeight; // focus on bottom
+				// check if bad strings are there, and if not, display text to console box
+				if (text != CONSOLE_layer_set_visible && text != CONSOLE_layer_tilemap_get_id && text != CONSOLE_layer_depth && text != CONSOLE_draw_tilemap && text != CONSOLE_layer_get_all_elements)
+					{element.value += text + "\n";}
+				element.scrollTop = element.scrollHeight; // focus on bottom
             }
           };
         })(),
@@ -683,7 +294,6 @@
 "game.unx" ].join( ";");
       }
 
-		// Verify Files
       function manifestFilesMD5()
       {
         return [ "a5276971844487765d6997bd153082a2",
@@ -695,7 +305,6 @@
 
       function onFirstFrameRendered()
       {
-          //console.log("First frame rendered!");
       }
 
       function onGameSetWindowSize(width,height)
@@ -709,7 +318,6 @@
           }
       }
 
-	// Trigger Ads
     function triggerAd(adId, _callback_beforeAd, _callback_afterAd, _callback_adDismissed, _callback_adViewed, _callback_adbreakDone) {
        // need to take a copy of the RValues represented
        var pRValueCopy = triggerAdPrefix( _callback_beforeAd, _callback_afterAd, _callback_adDismissed, _callback_adViewed, _callback_adbreakDone );
@@ -875,8 +483,3 @@
         enterFullscreenIfSupported();
         lockOrientationIfSupported();
       });
-    </script>
-	<!-- Load Main Game Runner JS File -->
-    <script async type="text/javascript" src="runner.js"></script>
-  </body>
-</html>
