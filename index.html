@@ -7,48 +7,50 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <main class="launcher">
-    <header class="topbar">
-      <div>
-        <div class="eyebrow">Ooozy's Launcher</div>
-        <h1>Choose a game</h1>
+  <main class="console">
+
+    <!-- TOP SCREEN -->
+    <section class="screen top-screen" aria-label="Selected game">
+      <div class="statusbar">
+        <span id="clock">--:--</span>
+        <span class="brand">Ooozy's Launcher</span>
+        <span class="status" id="status">Loading games...</span>
       </div>
-      <div class="status" id="status">Loading games...</div>
-    </header>
-  <div class="search-wrap">
-    <label for="gameSearch">Search games</label>
-
-    <div class="search-box">
-        <span aria-hidden="true">⌕</span>
-
-        <input
-            id="gameSearch"
-            type="search"
-            placeholder="Search by game name, ID, or description..."
-            autocomplete="off"
-            spellcheck="false"
-        >
-
-        <button
-            id="clearSearch"
-            type="button"
-            aria-label="Clear search"
-            title="Clear search"
-        >×</button>
-    </div>
-</div>
-
-    <section class="content">
-      <div class="game-grid" id="gameGrid" aria-label="Games"></div>
-
-      <aside class="details" id="details">
+      <div class="details" id="details">
         <div class="empty">
           <div class="empty-icon">▶</div>
           <h2>Select a game</h2>
-          <p>Choose a game from the library to see its details.</p>
+          <p>Tap an icon on the bottom screen.</p>
         </div>
-      </aside>
+      </div>
     </section>
+
+    <div class="hinge" aria-hidden="true"></div>
+
+    <!-- BOTTOM SCREEN -->
+    <section class="screen bottom-screen" aria-label="Game library">
+      <div class="search-box">
+        <span aria-hidden="true">⌕</span>
+        <input
+          id="gameSearch"
+          type="search"
+          placeholder="Search games..."
+          aria-label="Search games"
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button id="clearSearch" type="button" aria-label="Clear search" title="Clear search">×</button>
+      </div>
+
+      <div class="pager">
+        <button class="arrow" id="prevPage" type="button" aria-label="Previous page">‹</button>
+        <div class="game-grid" id="gameGrid" aria-label="Games"></div>
+        <button class="arrow" id="nextPage" type="button" aria-label="Next page">›</button>
+      </div>
+
+      <div class="dots" id="dots" aria-hidden="true"></div>
+    </section>
+
   </main>
 
   <script src="launcher.js"></script>
