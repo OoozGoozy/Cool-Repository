@@ -4,6 +4,8 @@
   const grid = document.getElementById("gameGrid");
   const details = document.getElementById("details");
   const status = document.getElementById("status");
+  const searchInput = document.getElementById("gameSearch");
+  const clearSearch = document.getElementById("clearSearch");
 
   let games = [];
   let selectedId = null;
@@ -68,6 +70,62 @@
 
     button.addEventListener("click", () => selectGame(game.id));
     return button;
+  }
+
+  function filterGames() {
+    const query = searchInput.value.trim().toLowerCase();
+
+    const filtered = games.filter(game => {
+        const name = safeText(game.name).toLowerCase();
+        const id = safeText(game.id).toLowerCase();
+        const description = safeText(game.description).toLowerCase();
+
+        return (
+            !query ||
+            name.includes(query) ||
+            id.includes(query) ||
+            description.includes(query)
+        );
+    });
+
+    grid.innerHTML = "";
+
+    if (filtered.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "no-results";
+
+        const heading = document.createElement("h2");
+        heading.textContent = "No games found";
+
+        const message = document.createElement("p");
+        message.textContent =
+            `Nothing matched "${searchInput.value.trim()}".`;
+
+        empty.append(heading, message);
+        grid.appendChild(empty);
+
+        setStatus("0 games found");
+        return;
+    }
+
+    filtered.forEach(game => {
+        grid.appendChild(renderCard(game));
+    });
+
+    setStatus(
+        query
+            ? `${filtered.length} of ${games.length} games`
+            : `${games.length} game${games.length === 1 ? "" : "s"} available`
+    );
+
+    if (
+        selectedId &&
+        filtered.some(game => game.id === selectedId)
+    ) {
+        selectGame(selectedId);
+    } else {
+        selectGame(filtered[0].id);
+    }
   }
 
   function selectGame(id) {
@@ -158,17 +216,21 @@
         throw new Error("No valid games were found in games.json.");
       }
 
-      grid.innerHTML = "";
-      games.forEach(game => grid.appendChild(renderCard(game)));
-
-      setStatus(`${games.length} game${games.length === 1 ? "" : "s"} available`);
-      selectGame(games[0].id);
+      filterGames();
     } catch (error) {
       console.error(error);
       setStatus("Failed to load games");
       showError("Could not load games.json. Make sure the launcher is being served through GitHub Pages and that games.json is in the repository root.");
     }
   }
+
+  searchInput.addEventListener("input", filterGames);
+
+clearSearch.addEventListener("click", () => {
+    searchInput.value = "";
+    filterGames();
+    searchInput.focus();
+});
 
   loadGames();
 })();
