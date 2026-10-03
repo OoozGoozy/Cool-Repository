@@ -1,0 +1,9 @@
+[
+    {
+        "id": "example-game",
+        "name": "Example Game",
+        "description": "A placeholder game folder showing how the launcher works.",
+        "thumbnail": "assets/thumbnails/example-game.svg",
+        "version": "1.0.0"
+    }
+]

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Game Launcher</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="launcher">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">GITHUB GAME LAUNCHER</div>
+        <h1>Choose a game</h1>
+      </div>
+      <div class="status" id="status">Loading games...</div>
+    </header>
+
+    <section class="content">
+      <div class="game-grid" id="gameGrid" aria-label="Games"></div>
+
+      <aside class="details" id="details">
+        <div class="empty">
+          <div class="empty-icon">▶</div>
+          <h2>Select a game</h2>
+          <p>Choose a game from the library to see its details.</p>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <script src="launcher.js"></script>
+</body>
+</html>
